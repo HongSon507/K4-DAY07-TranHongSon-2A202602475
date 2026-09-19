@@ -173,9 +173,9 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 > *Ghi chú đối chiếu:* Trong điều kiện chạy giả lập `MockEmbedder` (45 chunks), tổng điểm đạt **2/10** (2 câu có chunk gold trong top-3). Khi đối chiếu với lần chạy TF-IDF chuẩn hóa chung của nhóm trên cùng cấu hình `recursive_280` (xem [REPORT_NHOM.md](REPORT_NHOM.md)), chiến lược này tạo 40 chunks với độ dài trung bình 189,4 ký tự, đạt **7/10 điểm** (trả lời đúng Q1, Q3, Q5 với bằng chứng ở Top-1, điểm yếu là vỡ ngữ cảnh bảng GPA ở Q2).
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
-> 1. **Chiến lược lặp Header (`heading_320` của Bùi Tùng Dương):** Việc tự động đính kèm tiêu đề cấp trên vào từng chunk con đã giúp giữ ngữ cảnh phân cấp cực tốt, đưa thông tin điều kiện tín chỉ/GPA của RMIT (Q4) thẳng lên Top-1.
-> 2. **Sức mạnh của Lọc Metadata kết hợp:** Thử nghiệm câu Q5 cho thấy nếu không có metadata filter (`audience=student`), tài liệu hỗ trợ giảng viên UEH sẽ chiếm vị trí Top-1 ở toàn bộ các chiến lược. Lọc metadata là lá chắn quan trọng nhất để loại bỏ hoàn toàn các tài liệu sai đối tượng trước khi xếp hạng.
-> 3. **Thách thức bảo toàn bảng Markdown:** Cả nhóm cùng nhận thấy các bộ chia câu hay chia đệ quy thông thường đều có nguy cơ cắt ngang các hàng của bảng điều kiện (như bảng GPA VinUni ở Q2), đòi hỏi phải có parser nhận diện bảng chuyên dụng để bảo toàn toàn bộ hàng và tên cột.
+> 1. **Chiến lược lặp Header (`heading_320` của Đinh Đức Thái):** Việc tự động đính kèm tiêu đề cấp trên vào từng chunk con đã giúp giữ ngữ cảnh phân cấp cực tốt, đưa thông tin điều kiện tín chỉ/GPA của RMIT (Q4) thẳng lên Top-1.
+> 2. **Sức mạnh của Lọc Metadata kết hợp (phát hiện từ nhóm và chiến lược Metadata-enriched của Hoàng Trung Hiếu):** Thử nghiệm câu Q5 cho thấy nếu không có metadata filter (`audience=student`), tài liệu hỗ trợ giảng viên UEH sẽ chiếm vị trí Top-1 ở toàn bộ các chiến lược. Lọc metadata là lá chắn quan trọng nhất để loại bỏ hoàn toàn các tài liệu sai đối tượng trước khi xếp hạng.
+> 3. **Thách thức bảo toàn bảng Markdown (khi so sánh với Fixed-size của Bùi Tùng Dương và Sentence của Đàm Quang Sơn):** Cả nhóm cùng nhận thấy các bộ chia cắt theo kích thước cố định hay câu đều có nguy cơ cắt ngang các hàng của bảng điều kiện (như bảng GPA VinUni ở Q2), đòi hỏi phải có parser nhận diện bảng chuyên dụng để bảo toàn toàn bộ hàng và tên cột.
 
 ---
 

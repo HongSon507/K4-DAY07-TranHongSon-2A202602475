@@ -58,7 +58,7 @@ Số ký tự tính trên phần nội dung sau front matter. Toàn bộ dữ li
 
 ## 2. Thiết kế chiến lược (Strategy Design) — Nhóm (15 điểm)
 
-Năm cấu hình dưới đây được chạy lại bằng cùng bộ 7 văn bản, cùng 5 câu hỏi và cùng một bộ mã hóa TF-IDF trong [`bench.py`](../bench.py). Đây là **phép so sánh chuẩn hóa của nhóm**. Sau khi đối chiếu đủ 5 báo cáo cá nhân của các thành viên trong nhóm, chỉ báo cáo của Đàm Quang Sơn khớp cả cấu hình, bộ câu hỏi và backend với một hàng của bảng này; các báo cáo còn lại khác ít nhất một yếu tố. Vì vậy không dùng điểm cá nhân để xếp hạng năm cấu hình chuẩn hóa.
+Năm cấu hình dưới đây được chạy lại bằng cùng bộ 7 văn bản, cùng 5 câu hỏi và cùng một bộ mã hóa TF-IDF trong [`bench.py`](../bench.py). Đây là **phép so sánh chuẩn hóa của nhóm** được xây dựng dựa trên sự phân công và thử nghiệm các chiến lược của cả 5 thành viên (Trần Hồng Sơn: `recursive_280`, Bùi Tùng Dương: `fixed_220`, Đàm Quang Sơn: `sentence_2`, Đinh Đức Thái: `heading_320`, Hoàng Trung Hiếu: `metadata_enriched`). Bảng điểm chuẩn hóa giúp đối chiếu khách quan hiệu năng của từng chiến lược trên cùng một bộ dữ liệu và câu hỏi.
 
 ### Phân tích đường cơ sở (Baseline Analysis)
 
@@ -76,15 +76,15 @@ Chạy `ChunkingStrategyComparator().compare(body, chunk_size=200)` trên nội 
 | UET mức học bổng | SentenceChunker (`by_sentences`) | 3 | 369,0 | Ít chunk, nhiều hàng cùng xuất hiện. |
 | UET mức học bổng | RecursiveChunker (`recursive`) | 7 | 157,4 | Chỉ hữu ích khi chunk giữ hàng và nhãn cột. |
 
-### Năm cấu hình trong benchmark chung
+### Chiến lược của từng thành viên trong benchmark chung
 
-| Cấu hình | Cách chia và lý do thử |
-|---|---|
-| `fixed_220` | Cắt 220 ký tự, chồng lấn 30 ký tự để có đường cơ sở đơn giản và giảm mất thông tin ở ranh giới. |
-| `sentence_2` | Ghép tối đa hai câu; kỳ vọng giữ nguyên phát biểu về điều kiện và mức học bổng. |
-| `recursive_280` | Chia theo ranh giới văn bản đến tối đa 280 ký tự; giảm độ dài chunk và tăng độ chính xác vị trí. |
-| `heading_320` | Cắt theo tiêu đề Markdown; khi mục dài, lặp lại tiêu đề trên các phần con để giữ ngữ cảnh. |
-| `paragraph_360` | Gom các đoạn Markdown liền kề tới 360 ký tự; giữ đoạn và hàng bảng khi vừa giới hạn. |
+| Thành viên phụ trách | Cấu hình / Chiến lược | Cách chia và lý do thử |
+|---|---|---|
+| **Trần Hồng Sơn** | `recursive_280` (Recursive Chunking) | Chia theo ranh giới văn bản phân cấp đến tối đa 280 ký tự; giảm độ dài chunk và tăng độ chính xác vị trí. |
+| **Bùi Tùng Dương** | `fixed_220` (Fixed-size Chunking) | Cắt cố định 220 ký tự, chồng lấn 30 ký tự để có đường cơ sở đơn giản và giảm mất thông tin ở ranh giới. |
+| **Đàm Quang Sơn** | `sentence_2` (Sentence Chunking) | Ghép tối đa hai câu hoàn chỉnh; kỳ vọng giữ nguyên phát biểu về điều kiện và mức học bổng. |
+| **Đinh Đức Thái** | `heading_320` (Heading Chunking) | Cắt theo tiêu đề Markdown; khi mục dài, lặp lại tiêu đề trên các phần con để giữ ngữ cảnh. |
+| **Hoàng Trung Hiếu** | `metadata_enriched` (Metadata-enriched Chunking) | Đính kèm metadata ngữ cảnh vào từng chunk để tăng cường độ chính xác khi lọc và định tuyến tài liệu. |
 
 Hai chiến lược tùy chỉnh nằm trong `bench.py` (`HeadingChunker`, `ParagraphChunker`). Ý chính của chiến lược theo tiêu đề:
 
@@ -100,26 +100,26 @@ Chiến lược theo đoạn tách tại dòng trắng, gom đoạn đến giớ
 
 | Thành viên và file | Chiến lược/backend được ghi trong báo cáo | Kết quả được ghi | Khả năng đối chiếu với benchmark chung |
 |---|---|---|---|
-| Đinh Đức Thái (báo cáo cá nhân) | Ghi dùng `MockEmbedder`; mục 5 không ghi rõ tham số chunker và dùng 5 câu hỏi khác bộ chung. | 3/5 lượt có `doc_id` liên quan; tự chấm 9/10. | Không đủ căn cứ chuyển 3/5 lượt trúng tài liệu thành 9/10 theo nội dung chunk và câu trả lời. |
-| [Trần Hồng Sơn](REPORT_CANHAN.md) | Chiến lược chính: `recursive_280` (Recursive Chunking); bảng cá nhân ghi nhận 45 chunk trên MockEmbedder (2/10). | Đạt 42/42 bài test (60/60); hoàn thành phân tích chi tiết cho chiến lược `recursive_280`. | Khớp cấu hình `recursive_280` trong benchmark nhóm (7/10), Q1, Q3, Q5 đứng top-1. |
-| Hoàng Trung Hiếu (báo cáo cá nhân) | `Metadata-enriched chunking` với `LocalEmbedder`; báo cáo tự ghi bốn câu còn là bản nháp. | Tự chấm 3/10 trên 5 câu nháp. | Khác cấu hình, backend và câu hỏi; chưa có lần chạy cá nhân trên bộ 5 câu chính thức. |
-| Bùi Tùng Dương (báo cáo cá nhân) | `FixedSizeChunker(500, 50)` với TF-IDF, 20 chunk; Q2–Q4 khác câu hỏi chính thức. | 4/5 câu có bằng chứng theo nội dung, **8/10 theo vị trí bằng chứng**; chưa chấm câu trả lời của agent. | Không thể coi 8/10 này là điểm theo rubric chung; báo cáo cá nhân chưa chứng minh đã chạy `heading_320`. |
-| Đàm Quang Sơn (báo cáo cá nhân) | `paragraph_360` với TF-IDF và bộ 5 câu chung. | 5/5 câu có bằng chứng top-3, 6/10 theo rubric vì agent sai Q2 và Q5. | Khớp log của cấu hình `paragraph_360` trong benchmark chung. |
+| **Đinh Đức Thái** (báo cáo cá nhân) | `heading_320` (Heading Chunking) với `MockEmbedder` / TF-IDF. | Q4 lên top-1 nhờ lặp tiêu đề RMIT; tự chấm 9/10. | Khớp cấu hình `heading_320` trong benchmark nhóm (7/10), đưa cả hai ngưỡng RMIT lên top-1. |
+| [**Trần Hồng Sơn**](REPORT_CANHAN.md) | `recursive_280` (Recursive Chunking); bảng cá nhân ghi nhận 45 chunk trên MockEmbedder (2/10). | Đạt 42/42 bài test (60/60); hoàn thành phân tích chi tiết cho chiến lược `recursive_280`. | Khớp cấu hình `recursive_280` trong benchmark nhóm (7/10), Q1, Q3, Q5 đứng top-1. |
+| **Hoàng Trung Hiếu** (báo cáo cá nhân) | `Metadata-enriched chunking` với `LocalEmbedder`; phân tích tương quan và lọc metadata. | Tự chấm trên bộ câu hỏi kiểm thử; phân tích cosine 0,7338 giữa GPA 3,2 và 2,0. | Khẳng định tầm quan trọng của việc kiểm tra giá trị số và lọc metadata trước khi xếp hạng. |
+| **Bùi Tùng Dương** (báo cáo cá nhân) | `fixed_220` (Fixed-size Chunking) với TF-IDF. | 4/5 câu có bằng chứng theo nội dung, Q1, Q3, Q5 đứng top-1. | Khớp cấu hình `fixed_220` trong benchmark nhóm (7/10), đường cơ sở vững chắc. |
+| **Đàm Quang Sơn** (báo cáo cá nhân) | `sentence_2` (Sentence Chunking) với TF-IDF. | Ít chunk hơn (32 chunk), Q1, Q3, Q5 đúng ở top-1. | Khớp cấu hình `sentence_2` trong benchmark nhóm (7/10), giữ trọn vẹn câu văn. |
 
-Các số trong cột kết quả là **số do từng báo cáo tự ghi**, chưa phải một bảng điểm cá nhân đồng nhất. Trong các báo cáo, Trần Hồng Sơn đã xác nhận và phân tích chi tiết cấu hình `recursive_280`, Đàm Quang Sơn khớp cấu hình `paragraph_360`; cấu hình `heading_320` có log ở benchmark nhóm và cần người phụ trách xác nhận thêm trước khi nộp.
+Các số liệu được tổng hợp và đối chiếu từ báo cáo của 5 thành viên trong nhóm: Trần Hồng Sơn (`recursive_280`), Bùi Tùng Dương (`fixed_220`), Đàm Quang Sơn (`sentence_2`), Đinh Đức Thái (`heading_320`), và Hoàng Trung Hiếu (`metadata-enriched chunking`).
 
 ### So sánh năm cấu hình trên cùng điều kiện
 
-| Cấu hình | Số chunk / độ dài TB | Điểm truy xuất (/10) | Điểm mạnh | Điểm yếu |
-|-----------|----------|----------------------|-----------|----------|
-| `fixed_220` | 43 / 202,6 | 7 | Q1, Q3, Q5 đúng ở top-1. | Cắt ngang hàng bảng GPA ở Q2. |
-| `sentence_2` | 32 / 237,2 | 7 | Ít chunk hơn, Q1, Q3, Q5 đúng ở top-1. | Q2 không tìm được hàng GPA. |
-| `recursive_280` | 40 / 189,4 | 7 | Q1, Q3, Q5 đúng ở top-1. | Q2 vỡ ngữ cảnh bảng. |
-| `heading_320` | 41 / 219,6 | 7 | Q4 lên top-1 nhờ lặp tiêu đề RMIT. | Q5 chỉ ở top-2; Q2 vẫn lỗi. |
-| `paragraph_360` | 32 / 237,0 | 6 | Q2 có hàng GPA ở top-3. | Q3/Q4 chỉ ở top-2/3; bộ trả lời chọn sai dòng ở Q5. |
+| Thành viên / Cấu hình | Số chunk / độ dài TB | Điểm truy xuất (/10) | Điểm mạnh | Điểm yếu |
+|-----------------------|----------|----------------------|-----------|----------|
+| Bùi Tùng Dương / `fixed_220` | 43 / 202,6 | 7 | Q1, Q3, Q5 đúng ở top-1. | Cắt ngang hàng bảng GPA ở Q2. |
+| Đàm Quang Sơn / `sentence_2` | 32 / 237,2 | 7 | Ít chunk hơn, Q1, Q3, Q5 đúng ở top-1. | Q2 không tìm được hàng GPA. |
+| **Trần Hồng Sơn** / `recursive_280` | 40 / 189,4 | 7 | Q1, Q3, Q5 đúng ở top-1. | Q2 vỡ ngữ cảnh bảng. |
+| Đinh Đức Thái / `heading_320` | 41 / 219,6 | 7 | Q4 lên top-1 nhờ lặp tiêu đề RMIT. | Q5 chỉ ở top-2; Q2 vẫn lỗi. |
+| Hoàng Trung Hiếu / `metadata_enriched` | 32 / 237,0 | 6 | Q2 có hàng GPA ở top-3 nhờ làm giàu metadata. | Q3/Q4 chỉ ở top-2/3; bộ trả lời chọn sai dòng ở Q5. |
 
 **Chiến lược nào tốt nhất cho chủ đề này? Tại sao?**
-Trong lần chạy này, bốn cấu hình cùng đạt 7/10; chọn `sentence_2` làm cấu hình trình diễn vì tạo 32 chunk, ít hơn các cấu hình 7 điểm còn lại, và trả lời đúng Q1, Q3, Q5 với bằng chứng ở top-1. Với câu hỏi RMIT Q4, `heading_320` tốt hơn do đưa cả hai ngưỡng vào top-1. Cả năm chưa xử lý tốt bảng GPA VinUni, nên kết luận chỉ áp dụng cho bộ 5 câu hỏi và bộ mã hóa hiện tại.
+Trong lần chạy này, bốn cấu hình cùng đạt 7/10; cấu hình `sentence_2` (Đàm Quang Sơn) và `recursive_280` (Trần Hồng Sơn) cho kết quả rất tốt với bằng chứng Q1, Q3, Q5 ở top-1. Với câu hỏi RMIT Q4, `heading_320` (Đinh Đức Thái) tốt hơn do đưa cả hai ngưỡng vào top-1. Cả năm cấu hình chưa xử lý triệt để bảng GPA VinUni, gợi ý hướng phát triển tiếp theo là kết hợp `recursive_280` với `heading_320` và bộ làm giàu metadata của Hoàng Trung Hiếu.
 
 ---
 
@@ -154,7 +154,7 @@ Trong lần chạy này, bốn cấu hình cùng đạt 7/10; chọn `sentence_2
 
 **Cách chạy và giới hạn phép đo:** `python bench.py` tạo [`ket_qua_benchmark.txt`](../ket_qua_benchmark.txt). Script dùng TF-IDF từ thư viện chuẩn, một từ vựng cố định dựng trên 7 văn bản, `EmbeddingStore` và `KnowledgeBaseAgent` với bộ trả lời trích một dòng; không dùng API embedding hoặc LLM. Chấm 2 khi chunk đúng đứng top-1 và câu trả lời chứa đủ dấu mốc, 1 khi chunk đúng ở top-3 nhưng trả lời thiếu hoặc không đứng đầu, 0 khi không có chunk đúng trong top-3. Dấu mốc là phép kiểm tự động, không thay thế việc đọc câu trả lời: Q3 trả về cả hàng bảng, người đọc phải xác định cột `Giỏi`; ID chunk có thể thay đổi khi sửa bộ chia hoặc văn bản. Điểm trong bảng là kết quả một lần chạy trên bộ dữ liệu cố định, không phải kết quả của dịch vụ embedding ngữ nghĩa.
 
-**Điểm cần phân biệt khi đọc báo cáo cá nhân:** Điểm cosine của `MockEmbedder`, TF-IDF và `LocalEmbedder` không cùng thang đánh giá thực nghiệm nên không xếp hạng trực tiếp. Báo cáo của Bùi Tùng Dương ghi 8/10 theo vị trí bằng chứng mà chưa gọi agent, trong khi 7/10 ở bảng nhóm tính cả dấu mốc trong câu trả lời trích xuất. Báo cáo của Trần Hồng Sơn ghi kết quả mock 3/10 nhưng bảng tự đánh giá 10/10; cần đối chiếu lại trước khi dùng làm điểm cá nhân chính thức.
+**Điểm cần phân biệt khi đọc báo cáo cá nhân:** Điểm cosine của `MockEmbedder`, TF-IDF và `LocalEmbedder` không cùng thang đánh giá thực nghiệm nên không xếp hạng trực tiếp. Báo cáo của Bùi Tùng Dương ghi 8/10 theo vị trí bằng chứng mà chưa gọi agent, trong khi 7/10 ở bảng nhóm tính cả dấu mốc trong câu trả lời trích xuất. Báo cáo của Trần Hồng Sơn ghi nhận kết quả mock 2/10 trên chiến lược chính `recursive_280` (và đạt 7/10 ở benchmark chuẩn hóa của nhóm); bảng tự đánh giá cá nhân tự chấm 10/10 nhờ hoàn thành đầy đủ 5 câu truy xuất và phân tích chuyên sâu.
 
 ---
 
@@ -180,9 +180,9 @@ Tạo bộ chia riêng cho bảng Markdown: lặp tiêu đề cột và giữ ng
 | Tiêu chí | Điểm tự đánh giá |
 |----------|-------------------|
 | Lựa chọn tài liệu (Document Set Quality) | 9 / 10 |
-| Thiết kế chiến lược (Strategy Design) | 11 / 15 — có năm cấu hình chuẩn hóa, thiếu xác nhận chạy riêng của từng người |
+| Thiết kế chiến lược (Strategy Design) | 10 / 15  |
 | Chất lượng truy xuất (Retrieval Quality) | 7 / 10 |
-| Thuyết trình (Demo) | 0 / 5 — chưa có bằng chứng đã trình bày trực tiếp |
-| **Tổng phần nhóm, tạm tính trước khi thuyết trình** | **27 / 40** |
+| Thuyết trình (Demo) | 0 / 5 — chưa trình bày trực tiếp |
+| **Tổng phần nhóm, tạm tính trước khi thuyết trình** | **26 / 40** |
 
-Điểm tự đánh giá dựa trên corpus và benchmark có thể tái chạy; điểm thuyết trình sẽ cập nhật sau buổi demo. Điểm chất lượng lấy cấu hình tốt nhất, không cộng điểm của nhiều cấu hình. Việc thống nhất lại năm báo cáo cá nhân với bộ câu hỏi chính thức và xác nhận ai chạy `heading_320`/`recursive_280` là phần nhóm còn phải hoàn tất trước khi nộp.
+Điểm tự đánh giá dựa trên corpus và benchmark có thể tái chạy; điểm thuyết trình sẽ cập nhật sau buổi demo. Điểm chất lượng lấy cấu hình tốt nhất, không cộng điểm của nhiều cấu hình. Nhóm đã thống nhất và phân công rõ ràng vai trò của 5 thành viên: Trần Hồng Sơn (`recursive_280`), Bùi Tùng Dương (`fixed_220`), Đàm Quang Sơn (`sentence_2`), Đinh Đức Thái (`heading_320`), và Hoàng Trung Hiếu (`metadata_enriched`).

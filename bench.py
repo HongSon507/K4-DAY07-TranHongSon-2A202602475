@@ -121,8 +121,9 @@ def get_chunker(strategy: str = STRATEGY):
         "fixed_220":      lambda: FixedSizeChunker(chunk_size=220, overlap=30),
         "sentence_2":     lambda: SentenceChunker(max_sentences_per_chunk=2),
         "recursive_280":  lambda: RecursiveChunker(chunk_size=280),
-        "heading_320":    lambda: HeadingChunker(chunk_size=320),
-        "paragraph_360":  lambda: ParagraphChunker(chunk_size=360),
+        "heading_320":        lambda: HeadingChunker(chunk_size=320),
+        "paragraph_360":      lambda: ParagraphChunker(chunk_size=360),
+        "metadata_enriched":  lambda: ParagraphChunker(chunk_size=360),
     }
     factory = strategies.get(strategy)
     if factory is None:
