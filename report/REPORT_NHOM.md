@@ -102,7 +102,7 @@ Chiến lược theo đoạn tách tại dòng trắng, gom đoạn đến giớ
 |---|---|---|---|
 | Đinh Đức Thái (báo cáo cá nhân) | Ghi dùng `MockEmbedder`; mục 5 không ghi rõ tham số chunker và dùng 5 câu hỏi khác bộ chung. | 3/5 lượt có `doc_id` liên quan; tự chấm 9/10. | Không đủ căn cứ chuyển 3/5 lượt trúng tài liệu thành 9/10 theo nội dung chunk và câu trả lời. |
 | [Trần Hồng Sơn](REPORT_CANHAN.md) | `sentence_2`, bảng cá nhân ghi kết quả `MockEmbedder`. | Mô tả 3/10 (3/5 câu có bằng chứng top-3 trên Mock); hoàn thành code 42/42 tests pass (60/60). | Cùng câu hỏi với bộ chung, khác backend; cấu hình `sentence_2` trong benchmark TF-IDF đạt 7/10. |
-| Hoàng Trung Hiếu (báo cáo cá nhân) | `FixedSizeChunker(500, 50)` với `LocalEmbedder`; báo cáo tự ghi bốn câu còn là bản nháp. | Tự chấm 3/10 trên 5 câu nháp. | Khác cấu hình, backend và câu hỏi; chưa có lần chạy cá nhân trên bộ 5 câu chính thức. |
+| Hoàng Trung Hiếu (báo cáo cá nhân) | `Metadata-enriched chunking` với `LocalEmbedder`; báo cáo tự ghi bốn câu còn là bản nháp. | Tự chấm 3/10 trên 5 câu nháp. | Khác cấu hình, backend và câu hỏi; chưa có lần chạy cá nhân trên bộ 5 câu chính thức. |
 | Bùi Tùng Dương (báo cáo cá nhân) | `FixedSizeChunker(500, 50)` với TF-IDF, 20 chunk; Q2–Q4 khác câu hỏi chính thức. | 4/5 câu có bằng chứng theo nội dung, **8/10 theo vị trí bằng chứng**; chưa chấm câu trả lời của agent. | Không thể coi 8/10 này là điểm theo rubric chung; báo cáo cá nhân chưa chứng minh đã chạy `heading_320`. |
 | Đàm Quang Sơn (báo cáo cá nhân) | `paragraph_360` với TF-IDF và bộ 5 câu chung. | 5/5 câu có bằng chứng top-3, 6/10 theo rubric vì agent sai Q2 và Q5. | Khớp log của cấu hình `paragraph_360` trong benchmark chung. |
 
