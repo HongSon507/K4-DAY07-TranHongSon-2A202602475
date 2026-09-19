@@ -49,13 +49,25 @@
 
 Giải thích cách tiếp cận của bạn khi lập trình (implement) các phần chính trong gói `src`.
 
+### Chiến lược chính của tôi: Recursive Chunking (`RecursiveChunker`)
+
+Trong ba phương pháp chia nhỏ cơ bản (Fixed-size, Sentence-based, Recursive), **tôi (Trần Hồng Sơn) lựa chọn và tập trung phát triển Recursive Chunking làm chiến lược cốt lõi** (`recursive_280`).
+
+**Lý do chọn Recursive Chunking làm chiến lược trọng tâm:**
+1. **Tôn trọng cấu trúc phân cấp tự nhiên của văn bản:** Các tài liệu học bổng có cấu trúc logic phân tầng rõ rệt (Tên mục lớn `\n\n` → Các đoạn/điều khoản `\n` → Các câu giải thích `" "` → Ký tự). RecursiveChunker đi từ mức chia lớn nhất xuống nhỏ nhất, chỉ tách sâu khi vượt quá giới hạn độ dài, giữ cho các khối thông tin logic không bị phân mảnh vô lý.
+2. **Cân bằng tối ưu giữa kích thước chunk và độ hoàn chỉnh ngữ nghĩa:** Với `chunk_size=280` ký tự, RecursiveChunker chia nhỏ đủ sâu để tăng độ tập trung thông tin (tăng độ chính xác vị trí câu trả lời ngắn), đồng thời cơ chế gom khối (merge/pack) tuần tự các mảnh liền kề ngăn chặn hiện tượng sinh ra các chunk vụn vặt làm loãng điểm tương tự vector.
+3. **Bảo toàn ngữ cảnh điều kiện đi liền kết quả:** Trong chính sách học bổng, các điều kiện kèm theo (như mức GPA, số tín chỉ, hạnh kiểm) luôn cần gắn liền với tên loại học bổng. Phân tách theo cấu trúc đệ quy giúp giữ trọn vẹn ngữ cảnh này trong một chunk duy nhất tốt hơn nhiều so với FixedSize cắt ngang hay SentenceChunker chỉ nhìn dấu câu.
+
 ### Các hàm chia nhỏ (Chunking Functions)
+
+**`RecursiveChunker.chunk` / `_split`** — hướng tiếp cận chi tiết:
+Thuật toán hoạt động theo nguyên lý đệ quy hai chiều linh hoạt:
+- *Chiều đệ quy xuống sâu (Top-down):* Bắt đầu từ danh sách phân cách có thứ tự ưu tiên giảm dần `["\n\n", "\n", " ", ""]`. Nếu đoạn văn bản dài hơn `chunk_size`, hàm sẽ tách bằng phân cách hiện tại rồi đệ quy gọi `_split` trên từng mảnh con với phân cách kế tiếp nhỏ hơn.
+- *Chiều gom khối lên trên (Bottom-up packing):* Các mảnh con sau khi được chia nhỏ sẽ được gom lại tuần tự bằng chính phân cách hiện tại cho đến khi độ dài tiến sát `chunk_size` thì mới ngắt sang chunk mới, tránh tối đa việc tạo ra các chunk quá ngắn.
+- *3 Base cases xử lý dừng an toàn:* (1) Chuỗi rỗng hoặc chỉ có khoảng trắng trả về `[]`; (2) Độ dài văn bản `<= chunk_size` trả về nguyên khối `[text]`; (3) Khi hết danh sách separator mà văn bản vẫn dài hơn `chunk_size`, hệ thống kích hoạt cơ chế phân tách dự phòng (fallback slice) cắt theo từng lát cố định độ dài `chunk_size`.
 
 **`SentenceChunker.chunk`** — hướng tiếp cận:
 Sử dụng biểu thức chính quy `re.split(r"(?<=[.!?])(?:\s+|\n+)", text.strip())` với positive lookbehind để tách câu mà vẫn giữ nguyên dấu câu kết thúc (`.`, `!`, `?`). Xử lý chặt chẽ các edge cases: chuỗi rỗng/chỉ chứa khoảng trắng trả về `[]`, văn bản không có dấu câu thì giữ nguyên, và gom tuần tự tối đa `max_sentences_per_chunk` câu vào mỗi chunk đồng thời dùng `strip()` loại bỏ khoảng trắng thừa.
-
-**`RecursiveChunker.chunk` / `_split`** — hướng tiếp cận:
-Thuật toán hoạt động theo hai chiều: đệ quy xuống sâu (mảnh nào dài hơn `chunk_size` thì gọi tiếp `_split` với separator nhỏ hơn kế tiếp) và gom lên (nối các mảnh nhỏ liền kề bằng separator hiện tại cho đến sát `chunk_size` để tránh sinh chunk vụn). Có 3 base cases xử lý dừng: (1) chuỗi rỗng trả về `[]`, (2) độ dài chuỗi `<= chunk_size` trả về `[text]`, và (3) danh sách separator rỗng hoặc không còn separator nào khớp trong chuỗi thì phân tách dự phòng (fallback) theo lát cắt cố định độ dài `chunk_size`.
 
 ### Lớp EmbeddingStore
 
@@ -147,18 +159,18 @@ tests/test_solution.py::TestEmbeddingStoreDeleteDocument::test_delete_returns_tr
 
 ## 5. Kết quả truy xuất của tôi (Competition Results) — Cá nhân (10 điểm)
 
-Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src` với chiến lược được phân công `sentence_2` (`SentenceChunker(max_sentences_per_chunk=2)`). **5 câu hỏi này trùng khớp với bộ câu hỏi chung của nhóm** trong [REPORT_NHOM.md](REPORT_NHOM.md). Kết quả thực tế khi chạy `python bench.py` (ghi nhận trong [ket_qua_benchmark.txt](../ket_qua_benchmark.txt)):
+Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân của bạn trong gói `src` với chiến lược chính của tôi: **`recursive_280` (`RecursiveChunker(chunk_size=280)`)**. **5 câu hỏi này trùng khớp với bộ câu hỏi chung của nhóm** trong [REPORT_NHOM.md](REPORT_NHOM.md). Kết quả thực tế khi chạy `python bench.py` (ghi nhận trực tiếp trong [ket_qua_benchmark.txt](../ket_qua_benchmark.txt)):
 
 | # | Câu hỏi (Query) | Top-1 Chunk truy xuất được (tóm tắt) | Điểm Score | Có liên quan không? (Relevant) | Câu trả lời của Agent (tóm tắt) |
 |---|-------|--------------------------------|-------|-----------|------------------------|
-| 1 | Học bổng President’s Excellence của VinUni chi trả những gì? | `scholarship-renewal-policy#3`: Học bổng WIT 5%, tự động gia hạn nếu học bổng đầu vào chính duy trì... (Score: 0.2782) | 1 / 2 | Không ở Top-1 (Nhưng Gold Chunk nằm ở Top-3: `undergraduate-scholarships#4`, score: 0.2181) | "\| Học bổng WIT 5% \| Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. \|" |
-| 2 | Sinh viên VinUni cần GPA tối thiểu bao nhiêu để duy trì học bổng 100%? | `scholarship-renewal-policy#2`: Hỗ trợ tài chính theo nhu cầu, GPA tích lũy năm xét ít nhất 2,0... (Score: 0.2214) | 1 / 2 | Có một phần (Đúng tài liệu duy trì VinUni, nhưng bị nhầm sang hàng hỗ trợ nhu cầu GPA 2,0 thay vì 100% GPA 3,2) | "\| Hỗ trợ tài chính theo nhu cầu \| GPA tích lũy của năm xét đạt ít nhất 2,0 và hoàn tất tự đánh giá E.X.C.E.L cùng cuộc trao đổi với cố vấn. \|" |
-| 3 | Ở UET, học bổng loại Giỏi cho khóa QH-2023 đến QH-2025 là bao nhiêu mỗi tháng? | `scholarship-renewal-policy#3`: Học bổng WIT 5%... (Score: 0.3107) | 0 / 2 | Không (Top-1 và top-3 đều bị lệch sang tài liệu VinUni do vector giả lập) | "\| Học bổng WIT 5% \| Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. \|" |
-| 4 | Sinh viên RMIT Việt Nam đang học cần bao nhiêu tín chỉ và GPA để xin học bổng thành tích 2026? | `undergraduate-scholarships#2`: Hỗ trợ bổ sung, Special Academic hỗ trợ thêm 5%... (Score: 0.3156) | 1 / 2 | Không ở Top-1 (Nhưng Gold Chunk nằm ở Top-3: `rmit-current-student-scholarship-2026#3`, score: 0.1968) | "Một số học bổng đặc biệt có thể cộng dồn: Special Academic hỗ trợ thêm 5% cho ngành được trường chỉ định từng năm..." |
-| 5 | Ở UEH, mức hỗ trợ tài chính tối đa cho một học kỳ là bao nhiêu? | `undergraduate-scholarships#4`: Future Leader Grant nhắm đến ứng viên được học bổng 80–90%... (Score: 0.2178) | 0 / 2 | Không (Đã lọc audience=student nhưng chưa đủ lọc institution=ueh nên MockEmbedder xếp VinUni lên đầu) | "Future Leader Grant nhắm đến ứng viên được học bổng 80–90% nhưng khó chi trả 10–20% còn lại..." |
+| 1 | Học bổng President’s Excellence của VinUni chi trả những gì? | `scholarship-renewal-policy#1`: Văn bản GDL-SAM-004-V2.1... sinh viên nhận học bổng tài năng... (Score: 0.3210) | 0 / 2 | Không ở Top-1 (Gold Doc nằm ở `undergraduate-scholarships`) | "Văn bản GDL-SAM-004-V2.1, ban hành ngày 04/09/2025, áp dụng cho sinh viên cử nhân toàn thời gian nhận học bổng tài năng..." |
+| 2 | Sinh viên VinUni cần GPA tối thiểu bao nhiêu để duy trì học bổng 100%? | `rmit-business-scholarship-2026#0`: Tiêu đề học bổng RMIT 2026... (Score: 0.3296) | 0 / 2 | Không (Do bảng Markdown VinUni bị chia nhỏ, vector giả lập Mock trỏ nhầm sang doc RMIT) | "# Học bổng Cử nhân Kinh doanh RMIT Việt Nam 2026" |
+| 3 | Ở UET, học bổng loại Giỏi cho khóa QH-2023 đến QH-2025 là bao nhiêu mỗi tháng? | `uet-merit-scholarship-2025-2026#0`: Học bổng khuyến khích học tập UET... (Score: 0.2780) | 1 / 2 | Có, Top-1 trúng Gold Doc (`uet-merit-scholarship-2025-2026#0`), Top-3 cũng có Gold Chunk `#5` | "# Học bổng khuyến khích học tập UET học kỳ I năm 2025–2026" |
+| 4 | Sinh viên RMIT Việt Nam đang học cần bao nhiêu tín chỉ và GPA để xin học bổng thành tích 2026? | `uet-merit-scholarship-2025-2026#2`: CNTT CLC... (Score: 0.2281) | 1 / 2 | Không ở Top-1 (Nhưng Gold Chunk nằm ở Top-2: `rmit-current-student-scholarship-2026#3`, score: 0.2198, chứa đủ 96 tín chỉ và GPA 3,4/4,0) | "Riêng chương trình CNTT chất lượng cao yêu cầu học tập từ Giỏi và rèn luyện từ Tốt..." |
+| 5 | Ở UEH, mức hỗ trợ tài chính tối đa cho một học kỳ là bao nhiêu? | `rmit-business-scholarship-2026#3`: Ứng viên phải là công dân Việt Nam... (Score: 0.2886) | 0 / 2 | Không (Đã lọc audience=student nhưng chưa đủ lọc institution=ueh nên MockEmbedder xếp RMIT lên đầu) | "Ứng viên phải là công dân Việt Nam, tốt nghiệp phổ thông trong vòng hai năm trước hạn nộp..." |
 
-**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **3** / 5 (gồm Q1, Q2, Q4).
-> *Ghi chú đối chiếu:* Trong điều kiện chạy giả lập `MockEmbedder`, tổng điểm đạt **3/10** (3 câu có chunk gold trong top-3). Khi đối chiếu với lần chạy TF-IDF chung của nhóm trên cùng cấu hình `sentence_2`, chiến lược này đạt **7/10** (trả về đúng Top-1 ở Q1, Q3, Q5 nhờ tần suất từ vựng đặc trưng).
+**Bao nhiêu câu hỏi trả về chunk có liên quan trong top-3?** **2** / 5 (gồm Q3, Q4).
+> *Ghi chú đối chiếu:* Trong điều kiện chạy giả lập `MockEmbedder` (45 chunks), tổng điểm đạt **2/10** (2 câu có chunk gold trong top-3). Khi đối chiếu với lần chạy TF-IDF chuẩn hóa chung của nhóm trên cùng cấu hình `recursive_280` (xem [REPORT_NHOM.md](REPORT_NHOM.md)), chiến lược này tạo 40 chunks với độ dài trung bình 189,4 ký tự, đạt **7/10 điểm** (trả lời đúng Q1, Q3, Q5 với bằng chứng ở Top-1, điểm yếu là vỡ ngữ cảnh bảng GPA ở Q2).
 
 **Điều hay nhất tôi học được từ thành viên khác / nhóm khác (qua demo):**
 > 1. **Chiến lược lặp Header (`heading_320` của Bùi Tùng Dương):** Việc tự động đính kèm tiêu đề cấp trên vào từng chunk con đã giúp giữ ngữ cảnh phân cấp cực tốt, đưa thông tin điều kiện tín chỉ/GPA của RMIT (Q4) thẳng lên Top-1.

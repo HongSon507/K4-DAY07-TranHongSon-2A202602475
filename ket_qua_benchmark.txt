@@ -1,81 +1,81 @@
-=== Benchmark: strategy=sentence_2, embedding=mock embeddings fallback ===
+=== Benchmark: strategy=recursive_280, embedding=mock embeddings fallback ===
 
-  rmit-business-scholarship-2026.md: 5 chunks (doc_id=rmit-business-scholarship-2026)
-  rmit-current-student-scholarship-2026.md: 5 chunks (doc_id=rmit-current-student-scholarship-2026)
-  scholarship-renewal-policy.md: 5 chunks (doc_id=scholarship-renewal-policy)
-  ueh-faculty-support.md: 3 chunks (doc_id=ueh-faculty-support)
-  ueh-learning-support-scholarship.md: 4 chunks (doc_id=ueh-learning-support-scholarship)
-  uet-merit-scholarship-2025-2026.md: 4 chunks (doc_id=uet-merit-scholarship-2025-2026)
-  undergraduate-scholarships.md: 6 chunks (doc_id=undergraduate-scholarships)
+  rmit-business-scholarship-2026.md: 6 chunks (doc_id=rmit-business-scholarship-2026)
+  rmit-current-student-scholarship-2026.md: 6 chunks (doc_id=rmit-current-student-scholarship-2026)
+  scholarship-renewal-policy.md: 7 chunks (doc_id=scholarship-renewal-policy)
+  ueh-faculty-support.md: 5 chunks (doc_id=ueh-faculty-support)
+  ueh-learning-support-scholarship.md: 6 chunks (doc_id=ueh-learning-support-scholarship)
+  uet-merit-scholarship-2025-2026.md: 6 chunks (doc_id=uet-merit-scholarship-2025-2026)
+  undergraduate-scholarships.md: 9 chunks (doc_id=undergraduate-scholarships)
 
-Total chunks loaded: 32
+Total chunks loaded: 45
 
-Store size: 32
+Store size: 45
 
 --- Q1: Học bổng President's Excellence của VinUni chi trả những gì? ---
 Gold: Toàn bộ học phí và chi phí sinh hoạt.  (doc: undergraduate-scholarships)
-  top-1: score=0.2782  doc_id=scholarship-renewal-policy  id=scholarship-renewal-policy#3
-         | | Học bổng WIT 5% | Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. |  Với học bổng toàn phần hoặc 100%, 
-  top-2: score=0.2209  doc_id=ueh-faculty-support  id=ueh-faculty-support#2
+  top-1: score=0.3210  doc_id=scholarship-renewal-policy  id=scholarship-renewal-policy#1
+         Văn bản GDL-SAM-004-V2.1, ban hành ngày 04/09/2025, áp dụng cho sinh viên cử nhân toàn thời gian nhận học bổng tài năng 
+  top-2: score=0.2243  doc_id=uet-merit-scholarship-2025-2026  id=uet-merit-scholarship-2025-2026#0
+         # Học bổng khuyến khích học tập UET học kỳ I năm 2025–2026
+  top-3: score=0.2209  doc_id=ueh-faculty-support  id=ueh-faculty-support#4
          Chính sách tăng thu nhập hằng tháng thêm 20 triệu đồng cho Giáo sư, Phó Giáo sư cơ hữu; hoặc 10 triệu đồng cho người ký 
-  top-3: score=0.2181  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#4 ☆ GOLD
-         Future Leader Grant nhắm đến ứng viên được học bổng 80–90% nhưng khó chi trả 10–20% còn lại. Mức học bổng cuối cùng do H
 
-  Agent: | Học bổng WIT 5% | Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. |
-  Score: 1/2
+  Agent: Văn bản GDL-SAM-004-V2.1, ban hành ngày 04/09/2025, áp dụng cho sinh viên cử nhân toàn thời gian nhận học bổng tài năng hoặc hỗ trợ tài chính. Học bổng đầu vào và hỗ trợ theo nhu cầu được cấp cho toàn
+  Score: 0/2
 
 --- Q2: Sinh viên VinUni cần GPA tối thiểu bao nhiêu để duy trì học bổng 100%? ---
 Gold: GPA tích lũy của năm xét ít nhất 3,2.  (doc: scholarship-renewal-policy)
-  top-1: score=0.2214  doc_id=scholarship-renewal-policy  id=scholarship-renewal-policy#2 ☆ GOLD
-         | | Hỗ trợ tài chính theo nhu cầu | GPA tích lũy của năm xét đạt ít nhất 2,0 và hoàn tất tự đánh giá E.X.C.E.L cùng cuộc
-  top-2: score=0.1943  doc_id=ueh-faculty-support  id=ueh-faculty-support#2
-         Chính sách tăng thu nhập hằng tháng thêm 20 triệu đồng cho Giáo sư, Phó Giáo sư cơ hữu; hoặc 10 triệu đồng cho người ký 
-  top-3: score=0.1822  doc_id=ueh-learning-support-scholarship  id=ueh-learning-support-scholarship#1
-         Học bổng bán phần bằng 50% mức học phí trung bình của 15 tín chỉ; yêu cầu học lực và rèn luyện đều từ Khá. ## Điều kiện 
+  top-1: score=0.3296  doc_id=rmit-business-scholarship-2026  id=rmit-business-scholarship-2026#0
+         # Học bổng Cử nhân Kinh doanh RMIT Việt Nam 2026
+  top-2: score=0.2470  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#2
+         Theo trang tuyển sinh, học bổng President’s Excellence chi trả toàn bộ học phí và chi phí sinh hoạt; Provost’s Merit chi
+  top-3: score=0.2084  doc_id=rmit-current-student-scholarship-2026  id=rmit-current-student-scholarship-2026#3
+         Điều kiện xét gồm đã tích lũy ít nhất 96 tín chỉ tại RMIT Việt Nam và GPA tích lũy tối thiểu 3,4/4,0. Sinh viên đang giữ
 
-  Agent: | Hỗ trợ tài chính theo nhu cầu | GPA tích lũy của năm xét đạt ít nhất 2,0 và hoàn tất tự đánh giá E.X.C.E.L cùng cuộc trao đổi với cố vấn. |
-  Score: 1/2
+  Agent: # Học bổng Cử nhân Kinh doanh RMIT Việt Nam 2026
+  Score: 0/2
 
 --- Q3: Ở UET, học bổng loại Giỏi cho khóa QH-2023 đến QH-2025 là bao nhiêu mỗi tháng? ---
 Gold: 3.500.000đ/tháng.  (doc: uet-merit-scholarship-2025-2026)
-  top-1: score=0.3107  doc_id=scholarship-renewal-policy  id=scholarship-renewal-policy#3
-         | | Học bổng WIT 5% | Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. |  Với học bổng toàn phần hoặc 100%, 
-  top-2: score=0.2536  doc_id=ueh-learning-support-scholarship  id=ueh-learning-support-scholarship#1
-         Học bổng bán phần bằng 50% mức học phí trung bình của 15 tín chỉ; yêu cầu học lực và rèn luyện đều từ Khá. ## Điều kiện 
-  top-3: score=0.2195  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#5
-         Học bổng áp dụng trong quá trình học nếu người nhận đáp ứng điều kiện duy trì theo quy định của trường.
+  top-1: score=0.2780  doc_id=uet-merit-scholarship-2025-2026  id=uet-merit-scholarship-2025-2026#0 ☆ GOLD
+         # Học bổng khuyến khích học tập UET học kỳ I năm 2025–2026
+  top-2: score=0.1904  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#7
+         Future Leader Grant nhắm đến ứng viên được học bổng 80–90% nhưng khó chi trả 10–20% còn lại.
+  top-3: score=0.1831  doc_id=uet-merit-scholarship-2025-2026  id=uet-merit-scholarship-2025-2026#5 ☆ GOLD
+         Bảng chỉ giữ các nhóm khóa tiêu biểu. Mức của các nhóm còn lại có trên trang quyết định gốc. Học bổng được chuyển vào tà
 
-  Agent: | Học bổng WIT 5% | Tự động gia hạn nếu học bổng đầu vào chính vẫn được duy trì. |
-  Score: 0/2
+  Agent: # Học bổng khuyến khích học tập UET học kỳ I năm 2025–2026
+  Score: 1/2
 
 --- Q4: Sinh viên RMIT Việt Nam đang học cần bao nhiêu tín chỉ và GPA để xin học bổng thành tích 2026? ---
 Gold: Ít nhất 96 tín chỉ tại RMIT Việt Nam và GPA tích lũy 3,4/4,0.  (doc: rmit-current-student-scholarship-2026)
-  top-1: score=0.3156  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#2
-         ## Hỗ trợ bổ sung  Một số học bổng đặc biệt có thể cộng dồn: Special Academic hỗ trợ thêm 5% cho ngành được trường chỉ đ
-  top-2: score=0.2281  doc_id=uet-merit-scholarship-2025-2026  id=uet-merit-scholarship-2025-2026#1
+  top-1: score=0.2281  doc_id=uet-merit-scholarship-2025-2026  id=uet-merit-scholarship-2025-2026#2
          Riêng chương trình CNTT chất lượng cao yêu cầu học tập từ Giỏi và rèn luyện từ Tốt. Số người nhận phụ thuộc quỹ bằng 8% 
-  top-3: score=0.1968  doc_id=rmit-current-student-scholarship-2026  id=rmit-current-student-scholarship-2026#3 ☆ GOLD
-         Khi bằng GPA, người có nhiều tín chỉ hơn được ưu tiên; nếu vẫn bằng nhau thì so kết quả học kỳ gần nhất. Học bổng 50% đư
+  top-2: score=0.2198  doc_id=rmit-current-student-scholarship-2026  id=rmit-current-student-scholarship-2026#3 ★ GOLD+MARKER
+         Điều kiện xét gồm đã tích lũy ít nhất 96 tín chỉ tại RMIT Việt Nam và GPA tích lũy tối thiểu 3,4/4,0. Sinh viên đang giữ
+  top-3: score=0.1800  doc_id=ueh-learning-support-scholarship  id=ueh-learning-support-scholarship#0
+         # Học bổng hỗ trợ học tập UEH  ## Mức học bổng
 
-  Agent: Một số học bổng đặc biệt có thể cộng dồn: Special Academic hỗ trợ thêm 5% cho ngành được trường chỉ định từng năm; WIT hỗ trợ thêm 5% cho nữ ứng viên thuộc lĩnh vực khoa học hoặc công nghệ; Vinschool–
+  Agent: Riêng chương trình CNTT chất lượng cao yêu cầu học tập từ Giỏi và rèn luyện từ Tốt. Số người nhận phụ thuộc quỹ bằng 8% nguồn thực thu học phí theo chương trình, ngành và khóa.
   Score: 1/2
 
 --- Q5: Ở UEH, mức hỗ trợ tài chính tối đa cho một học kỳ là bao nhiêu? ---
 Gold: Học bổng toàn phần cho sinh viên bằng 100% học phí trung bình của 15 tín chỉ.  (doc: ueh-learning-support-scholarship)
 Filter: {'audience': 'student'}
-  top-1: score=0.2178  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#4
-         Future Leader Grant nhắm đến ứng viên được học bổng 80–90% nhưng khó chi trả 10–20% còn lại. Mức học bổng cuối cùng do H
-  top-2: score=0.1726  doc_id=scholarship-renewal-policy  id=scholarship-renewal-policy#0
-         # Tiêu chí duy trì học bổng đầu vào và hỗ trợ tài chính  Văn bản GDL-SAM-004-V2.1, ban hành ngày 04/09/2025, áp dụng cho
-  top-3: score=0.1664  doc_id=rmit-current-student-scholarship-2026  id=rmit-current-student-scholarship-2026#4
-         Hạn nộp cho học kỳ 3 năm 2026 là 17:00 ngày 27/07/2026; kết quả công bố trước ngày 29/08/2026.
+  top-1: score=0.2886  doc_id=rmit-business-scholarship-2026  id=rmit-business-scholarship-2026#3
+         Ứng viên phải là công dân Việt Nam, tốt nghiệp phổ thông trong vòng hai năm trước hạn nộp và đã đăng ký vào chương trình
+  top-2: score=0.2138  doc_id=undergraduate-scholarships  id=undergraduate-scholarships#6
+         Các quỹ tài trợ tư nhân hướng tới ứng viên đã đạt học bổng tài năng từ 80% trở lên nhưng vẫn gặp khó khăn với phần học p
+  top-3: score=0.1857  doc_id=rmit-current-student-scholarship-2026  id=rmit-current-student-scholarship-2026#4
+         Ứng viên được xếp hạng theo GPA và số tín chỉ đã hoàn thành tại RMIT. Khi bằng GPA, người có nhiều tín chỉ hơn được ưu t
 
   A/B (no filter):
-  top-1: score=0.2178  doc_id=undergraduate-scholarships
-  top-2: score=0.1726  doc_id=scholarship-renewal-policy
-  top-3: score=0.1664  doc_id=rmit-current-student-scholarship-2026
+  top-1: score=0.2886  doc_id=rmit-business-scholarship-2026
+  top-2: score=0.2138  doc_id=undergraduate-scholarships
+  top-3: score=0.2092  doc_id=ueh-faculty-support
 
-  Agent: Future Leader Grant nhắm đến ứng viên được học bổng 80–90% nhưng khó chi trả 10–20% còn lại. Mức học bổng cuối cùng do Hội đồng Tuyển sinh đánh giá.
+  Agent: Ứng viên phải là công dân Việt Nam, tốt nghiệp phổ thông trong vòng hai năm trước hạn nộp và đã đăng ký vào chương trình Cử nhân Kinh doanh. Một cách đáp ứng ngưỡng học lực là GPA lớp 12 từ 8,5/10; ng
   Score: 0/2
 
-=== Total score: 3/10 ===
+=== Total score: 2/10 ===

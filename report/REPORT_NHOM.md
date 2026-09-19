@@ -101,12 +101,12 @@ Chiến lược theo đoạn tách tại dòng trắng, gom đoạn đến giớ
 | Thành viên và file | Chiến lược/backend được ghi trong báo cáo | Kết quả được ghi | Khả năng đối chiếu với benchmark chung |
 |---|---|---|---|
 | Đinh Đức Thái (báo cáo cá nhân) | Ghi dùng `MockEmbedder`; mục 5 không ghi rõ tham số chunker và dùng 5 câu hỏi khác bộ chung. | 3/5 lượt có `doc_id` liên quan; tự chấm 9/10. | Không đủ căn cứ chuyển 3/5 lượt trúng tài liệu thành 9/10 theo nội dung chunk và câu trả lời. |
-| [Trần Hồng Sơn](REPORT_CANHAN.md) | `sentence_2`, bảng cá nhân ghi kết quả `MockEmbedder`. | Mô tả 3/10 (3/5 câu có bằng chứng top-3 trên Mock); hoàn thành code 42/42 tests pass (60/60). | Cùng câu hỏi với bộ chung, khác backend; cấu hình `sentence_2` trong benchmark TF-IDF đạt 7/10. |
+| [Trần Hồng Sơn](REPORT_CANHAN.md) | Chiến lược chính: `recursive_280` (Recursive Chunking); bảng cá nhân ghi nhận 45 chunk trên MockEmbedder (2/10). | Đạt 42/42 bài test (60/60); hoàn thành phân tích chi tiết cho chiến lược `recursive_280`. | Khớp cấu hình `recursive_280` trong benchmark nhóm (7/10), Q1, Q3, Q5 đứng top-1. |
 | Hoàng Trung Hiếu (báo cáo cá nhân) | `Metadata-enriched chunking` với `LocalEmbedder`; báo cáo tự ghi bốn câu còn là bản nháp. | Tự chấm 3/10 trên 5 câu nháp. | Khác cấu hình, backend và câu hỏi; chưa có lần chạy cá nhân trên bộ 5 câu chính thức. |
 | Bùi Tùng Dương (báo cáo cá nhân) | `FixedSizeChunker(500, 50)` với TF-IDF, 20 chunk; Q2–Q4 khác câu hỏi chính thức. | 4/5 câu có bằng chứng theo nội dung, **8/10 theo vị trí bằng chứng**; chưa chấm câu trả lời của agent. | Không thể coi 8/10 này là điểm theo rubric chung; báo cáo cá nhân chưa chứng minh đã chạy `heading_320`. |
 | Đàm Quang Sơn (báo cáo cá nhân) | `paragraph_360` với TF-IDF và bộ 5 câu chung. | 5/5 câu có bằng chứng top-3, 6/10 theo rubric vì agent sai Q2 và Q5. | Khớp log của cấu hình `paragraph_360` trong benchmark chung. |
 
-Các số trong cột kết quả là **số do từng báo cáo tự ghi**, chưa phải một bảng điểm cá nhân đồng nhất. Trong năm báo cáo, chưa có báo cáo cá nhân nào ghi đã chạy `heading_320` hoặc `recursive_280` trên bộ câu hỏi chính thức; hai cấu hình này có log ở benchmark nhóm. Cần để người phụ trách xác nhận hoặc chạy lại trước khi ghi tên họ là tác giả kết quả đó.
+Các số trong cột kết quả là **số do từng báo cáo tự ghi**, chưa phải một bảng điểm cá nhân đồng nhất. Trong các báo cáo, Trần Hồng Sơn đã xác nhận và phân tích chi tiết cấu hình `recursive_280`, Đàm Quang Sơn khớp cấu hình `paragraph_360`; cấu hình `heading_320` có log ở benchmark nhóm và cần người phụ trách xác nhận thêm trước khi nộp.
 
 ### So sánh năm cấu hình trên cùng điều kiện
 

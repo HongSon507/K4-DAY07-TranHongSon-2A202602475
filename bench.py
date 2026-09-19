@@ -5,7 +5,7 @@ bench.py — Benchmark script for CP5/CP6.
 Reads .md files from data/hoc-bong-chon-loc/, parses YAML frontmatter,
 chunks the body, loads into EmbeddingStore, and runs 5 benchmark queries.
 
-Strategy: sentence_2 (SentenceChunker, max_sentences_per_chunk=2)
+Strategy: recursive_280 (RecursiveChunker, chunk_size=280)
 Author:   Trần Hồng Sơn — K4-L3A / Nhóm G15
 """
 from __future__ import annotations
@@ -112,7 +112,7 @@ def parse_frontmatter(text: str) -> tuple[dict, str]:
 
 
 # ── Chunking strategy selector ─────────────────────────────────────────
-STRATEGY = os.getenv("BENCH_STRATEGY", "sentence_2")
+STRATEGY = os.getenv("BENCH_STRATEGY", "recursive_280")
 
 
 def get_chunker(strategy: str = STRATEGY):
